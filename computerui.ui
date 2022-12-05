@@ -18,6 +18,17 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget {
+	background-color:rgb(95, 95, 95);
+	color:rgb(255, 255, 255);
+}
+QPushButton{
+	background-color:black;
+	border-radius: 10px;
+}
+</string>
+  </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
@@ -59,7 +70,7 @@
     <string>Set game parametres:</string>
    </property>
   </widget>
-  <widget class="QRadioButton" name="radioButton">
+  <widget class="QRadioButton" name="easy">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -78,7 +89,7 @@
     <string>Easy</string>
    </property>
   </widget>
-  <widget class="QRadioButton" name="radioButton_2">
+  <widget class="QRadioButton" name="medium">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -97,7 +108,7 @@
     <string>Medium</string>
    </property>
   </widget>
-  <widget class="QRadioButton" name="radioButton_3">
+  <widget class="QRadioButton" name="hard">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -165,7 +176,10 @@ p, li { white-space: pre-wrap; }
     <string>Write your numer</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QLineEdit" name="number">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>180</x>
@@ -180,7 +194,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>40</x>
      <y>330</y>
-     <width>261</width>
+     <width>281</width>
      <height>291</height>
     </rect>
    </property>
@@ -189,6 +203,20 @@ p, li { white-space: pre-wrap; }
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>-1</pointsize>
+     <stylestrategy>PreferDefault</stylestrategy>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget {
+	border: none;
+	color: rgb(10, 10, 10);
+	font-size: 14px;
+}
+</string>
    </property>
    <property name="gridStyle">
     <enum>Qt::SolidLine</enum>
