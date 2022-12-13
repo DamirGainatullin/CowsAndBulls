@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from game_computer import Ui_SecondWindow
+from computer import Ui_SecondWindow
 
 
 class Ui_MainWindow(object):

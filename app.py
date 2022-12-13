@@ -5,17 +5,13 @@ import threading
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QStackedWidget, QListWidget
 from PyQt5 import QtWidgets
-import app_ui, rules_ui, computer_ui, game, game_computer
+import app_ui, rules_ui, computer, game
+
 
 class Rules(QMainWindow, rules_ui.Ui_Form):
     def __init__(self):
         super(Rules, self).__init__()
         self.setupUi(self)
-
-    def hard_game(self):
-        self.number.setEnabled(True)
-        self.answer = game.get_number(5)
-        self.textBrowser.setText('5 symbols, 5 attempts digits and letter')
 
 
 
@@ -32,7 +28,7 @@ class Menu(QMainWindow, app_ui.Ui_MainWindow):
 
     def openWindow(self):
         self.window = QtWidgets.QMainWindow()
-        self.ui = game_computer.Ui_SecondWindow()
+        self.ui = computer.Ui_SecondWindow()
         self.ui.setupUi(self.window)
         self.window.show()
 
