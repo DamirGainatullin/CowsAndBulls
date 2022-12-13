@@ -95,6 +95,7 @@ class Ui_Form(object):
 "    border: none;\n"
 "    color: rgb(10, 10, 10);\n"
 "    font-size: 14px;\n"
+"    font-color: white;\n"
 "}\n"
 "")
         self.tableWidget.setGridStyle(QtCore.Qt.SolidLine)

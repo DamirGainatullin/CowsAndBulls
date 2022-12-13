@@ -1,43 +1,17 @@
 import socket
+import sys
 import threading
 
 from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QStackedWidget, QListWidget
+from PyQt5 import QtWidgets
+import app_ui, rules_ui, computer_ui, game, game_computer
 
-import app_ui, rules_ui, computer_ui, game
-
-class Rules(QWidget, rules_ui.Ui_Form):
+class Rules(QMainWindow, rules_ui.Ui_Form):
     def __init__(self):
-        super().__init__()
-        # в методе инициализации мы вызываем родительскую инициализацию (устанавливаем элементы интерфейса)
+        super(Rules, self).__init__()
         self.setupUi(self)
 
-class Computer(QWidget, computer_ui.Ui_Form):
-    def __int__(self):
-        super().__int__()
-        self.setupUi(self)
-        self.pushButton.setEnabled(False)
-        if self.easy.isChecked():
-            self.pushButton.setEnabled(True)
-            self.easy_game()
-        elif self.medium.isChecked():
-            self.pushButton.setEnabled(True)
-            self.medium_game()
-        else:
-            self.pushButton.setEnabled(True)
-            self.hard_game()
-
-    def easy_game(self):
-        self.number.setEnabled(True)
-        self.textBrowser.setText('4 symbols, 7 attempts ,only digits')
-        self.answer = game.get_number(4)
-        pass
-
-    def medium_game(self):
-        self.number.setEnabled(True)
-        self.textBrowser.setText('4 symbols, 5 attempts only digits')
-        self.answer = game.get_number(4)
-        pass
 
 
     def hard_game(self):
@@ -49,6 +23,7 @@ class Computer(QWidget, computer_ui.Ui_Form):
 
 
 class Menu(QMainWindow, app_ui.Ui_MainWindow):
+
     def __init__(self):
         # в методе инициализации мы вызываем родительскую инициализацию (устанавливаем элементы интерфейса)
         super(Menu, self).__init__()
@@ -56,6 +31,7 @@ class Menu(QMainWindow, app_ui.Ui_MainWindow):
         self.ok.clicked.connect(self.nickname_was_chosen)
         self.pushButton.clicked.connect(self.show_rules)
         self.play.clicked.connect(self.play_was_clicked)
+        self.show()
 
     def nickname_was_chosen(self):
         self.play.setEnabled(True)
@@ -65,19 +41,21 @@ class Menu(QMainWindow, app_ui.Ui_MainWindow):
 
     def play_was_clicked(self):
         self.name = self.nickName.text()
+        # self.w = None
+        print(self.name)
         if self.radioPeople.isChecked():
             pass
         elif self.radioComputer.isChecked():
-            self.comp_dialog = Computer()
-            self.comp_dialog.setupUi(self.comp_dialog)
-            self.comp_dialog.show()
+            self.hide()
+            self.openWindow()
         else:
             pass
 
     def show_rules(self):
         self.dialog = Rules()
-        self.dialog.setupUi(self.dialog)
         self.dialog.show()
+
+
 
 
 
@@ -85,9 +63,8 @@ class Menu(QMainWindow, app_ui.Ui_MainWindow):
 
 if __name__ == "__main__":
     # при запуске клиента мы создаем инстанс приложения, созданного нами главного окна, и все запускаем
-    app = QApplication([])
+    app = QApplication(sys.argv)
     window = Menu()
-    window.show()
-    app.exec()
+    sys.exit(app.exec_())
 
     # pyuic5 name.ui -o name.py

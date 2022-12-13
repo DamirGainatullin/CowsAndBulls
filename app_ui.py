@@ -10,8 +10,16 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from game_computer import Ui_SecondWindow
+
 
 class Ui_MainWindow(object):
+    def openWindow(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_SecondWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(588, 350)

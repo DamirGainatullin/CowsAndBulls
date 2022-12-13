@@ -215,6 +215,7 @@ p, li { white-space: pre-wrap; }
 	border: none;
 	color: rgb(10, 10, 10);
 	font-size: 14px;
+	font-color: white;
 }
 </string>
    </property>
