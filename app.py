@@ -12,13 +12,10 @@ class Rules(QMainWindow, rules_ui.Ui_Form):
         super(Rules, self).__init__()
         self.setupUi(self)
 
-
-
     def hard_game(self):
         self.number.setEnabled(True)
         self.answer = game.get_number(5)
-        self.textBrowser.setText('5 symbols, 5 attempts digits and letter') # а может все таки ну эти буквы...
-
+        self.textBrowser.setText('5 symbols, 5 attempts digits and letter')
 
 
 
@@ -32,6 +29,12 @@ class Menu(QMainWindow, app_ui.Ui_MainWindow):
         self.pushButton.clicked.connect(self.show_rules)
         self.play.clicked.connect(self.play_was_clicked)
         self.show()
+
+    def openWindow(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = game_computer.Ui_SecondWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def nickname_was_chosen(self):
         self.play.setEnabled(True)
@@ -55,16 +58,11 @@ class Menu(QMainWindow, app_ui.Ui_MainWindow):
         self.dialog = Rules()
         self.dialog.show()
 
-
-
-
-
-
+    def lvl_was_clicked(self):
+        pass
 
 if __name__ == "__main__":
-    # при запуске клиента мы создаем инстанс приложения, созданного нами главного окна, и все запускаем
     app = QApplication(sys.argv)
     window = Menu()
     sys.exit(app.exec_())
-
     # pyuic5 name.ui -o name.py
