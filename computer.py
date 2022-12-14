@@ -9,9 +9,13 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtCore import QTimer
+from game import get_bulls_and_cows_from_number, get_number
 
 
 class Ui_SecondWindow(object):
+
     def setupUi(self, SecondWindow):
         SecondWindow.setObjectName("SecondWindow")
         SecondWindow.resize(567, 637)
@@ -147,15 +151,18 @@ class Ui_SecondWindow(object):
         self.statusbar = QtWidgets.QStatusBar(SecondWindow)
         self.statusbar.setObjectName("statusbar")
         SecondWindow.setStatusBar(self.statusbar)
+        self.send_clicked = False
+        self.sendButton.clicked.connect(self.send_was_clicked)
 
         # actions
-        # self.easy.clicked.connect(lambda x: self.textBrowser.setText('4 digits 10 attempts'))
-        # self.medium.clicked.connect(lambda x: self.textBrowser.setText('5 digits 8 attempts'))
-        # self.hard.clicked.connect(lambda x: self.textBrowser.setText('6 digits 8 attempts'))
-        # self.pushButton.clicked.connect(lambda x: self.start_game())
-
+        self.easy.clicked.connect(lambda x: self.textBrowser.setText('4 digits 10 attempts'))
+        self.medium.clicked.connect(lambda x: self.textBrowser.setText('5 digits 8 attempts'))
+        self.hard.clicked.connect(lambda x: self.textBrowser.setText('6 digits 8 attempts'))
+        self.pushButton.clicked.connect(self.start_game)
         self.retranslateUi(SecondWindow)
+        # self.timer = QTimer()
         QtCore.QMetaObject.connectSlotsByName(SecondWindow)
+
     def retranslateUi(self, SecondWindow):
         _translate = QtCore.QCoreApplication.translate
         SecondWindow.setWindowTitle(_translate("SecondWindow", "MainWindow"))
@@ -192,11 +199,41 @@ class Ui_SecondWindow(object):
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:7.8pt;\">DESCRIPTION:</span></p></body></html>"))
         self.sendButton.setText(_translate("SecondWindow", "Send"))
 
+    def send_was_clicked(self):
+        self.send_clicked = True
+
     def start_game(self):
+        self.number.setEnabled(True)
+        if self.easy.isChecked():
+            attempts = 10
+            length = 4
+        elif self.medium.isChecked():
+            attempts = 8
+            length = 5
+        else:
+            attempts = 8
+            length = 6
+        self.clicked = False
         self.sendButton.setEnabled(True)
-        self.flag = False
-        #game
-        #generate number
-        while self.flag:
-            self.number.text()
-        #QTableWidget
+        right_number = get_number(length)
+        self.currentRowCount = self.tableWidget.rowCount()
+        print(attempts)
+        for i in range(attempts):
+            # self.timer.start(10000)
+            # wait until input and click button
+            if self.send_clicked:
+                print(1)
+                self.sendButton.setEnabled(False)
+                try_num = self.number.text()
+                if try_num != right_number:
+                    cows_and_bulls = get_bulls_and_cows_from_number(right_number, try_num)
+                    print(2)
+                    self.tableWidget.setItem(i, 0, QTableWidgetItem(cows_and_bulls[0]))
+                    self.tableWidget.setItem(i, 0, QTableWidgetItem(cows_and_bulls[1]))
+                    self.tableWidget.setItem(i, 0, QTableWidgetItem(try_num))
+                    self.sendButton.setEnabled(True)
+                    print(3)
+                    self.send_clicked = False
+                else:
+                    return 'Win'
+        return 'You suck'
