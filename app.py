@@ -2,10 +2,9 @@ import socket
 import sys
 import threading
 
-from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QStackedWidget, QListWidget
 from PyQt5 import QtWidgets
-import app_ui, rules_ui, computer, game
+import app_ui, rules_ui, computer, people
 
 
 class Rules(QMainWindow, rules_ui.Ui_Form):
@@ -26,9 +25,16 @@ class Menu(QMainWindow, app_ui.Ui_MainWindow):
         self.play.clicked.connect(self.play_was_clicked)
         self.show()
 
-    def openWindow(self):
+    def openWindowCom(self):
         self.window = QtWidgets.QMainWindow()
         self.ui = computer.Ui_SecondWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
+    def openWindowPeople(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = people.Ui_ThirdWindow()
+        # people.get_name(self.nickName.text())
         self.ui.setupUi(self.window)
         self.window.show()
 
@@ -40,13 +46,12 @@ class Menu(QMainWindow, app_ui.Ui_MainWindow):
 
     def play_was_clicked(self):
         self.name = self.nickName.text()
-        # self.w = None
-        print(self.name)
         if self.radioPeople.isChecked():
-            pass
+            self.hide()
+            self.openWindowPeople()
         elif self.radioComputer.isChecked():
             self.hide()
-            self.openWindow()
+            self.openWindowCom()
         else:
             pass
 
@@ -54,8 +59,8 @@ class Menu(QMainWindow, app_ui.Ui_MainWindow):
         self.dialog = Rules()
         self.dialog.show()
 
-    def lvl_was_clicked(self):
-        pass
+    # def lvl_was_clicked(self):
+    #     pass
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

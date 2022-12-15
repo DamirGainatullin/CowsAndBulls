@@ -147,7 +147,3 @@ class Ui_ThirdWindow(object):
         self.label_3.setText(_translate("ThirdWindow", "Write your number"))
         self.label.setText(_translate("ThirdWindow", "Make a word to the enemy"))
         self.send_button.setText(_translate("ThirdWindow", "Send"))
-
-
-    def start_game(self):
-        pass
