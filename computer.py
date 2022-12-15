@@ -229,8 +229,8 @@ class Ui_SecondWindow(object):
                     cows_and_bulls = get_bulls_and_cows_from_number(right_number, try_num)
                     print(2)
                     self.tableWidget.setItem(i, 0, QTableWidgetItem(cows_and_bulls[0]))
-                    self.tableWidget.setItem(i, 0, QTableWidgetItem(cows_and_bulls[1]))
-                    self.tableWidget.setItem(i, 0, QTableWidgetItem(try_num))
+                    self.tableWidget.setItem(i, 1, QTableWidgetItem(cows_and_bulls[1]))
+                    self.tableWidget.setItem(i, 2, QTableWidgetItem(try_num))
                     self.sendButton.setEnabled(True)
                     print(3)
                     self.send_clicked = False
