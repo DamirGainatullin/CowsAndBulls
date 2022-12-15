@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import threading
 
 # Form implementation generated from reading ui file 'untitled_people.ui'
 #
@@ -12,6 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_ThirdWindow(object):
+
     def setupUi(self, ThirdWindow):
         ThirdWindow.setObjectName("ThirdWindow")
         ThirdWindow.resize(570, 637)
@@ -19,10 +21,10 @@ class Ui_ThirdWindow(object):
         font.setPointSize(37)
         ThirdWindow.setFont(font)
         ThirdWindow.setStyleSheet("QWidget {\n"
-"    background-color: rgb(95, 95, 95);\n"
-"    color: rgb(250, 250, 250);\n"
-"}\n"
-"")
+                                  "    background-color: rgb(95, 95, 95);\n"
+                                  "    color: rgb(250, 250, 250);\n"
+                                  "}\n"
+                                  "")
         self.centralwidget = QtWidgets.QWidget(ThirdWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.sendButton = QtWidgets.QPushButton(self.centralwidget)
@@ -43,11 +45,11 @@ class Ui_ThirdWindow(object):
         font.setStyleStrategy(QtGui.QFont.PreferDefault)
         self.tableWidget.setFont(font)
         self.tableWidget.setStyleSheet("QWidget {\n"
-"    border: none;\n"
-"    color: rgb(250, 250, 250);\n"
-"    font-size: 14px;\n"
-"}\n"
-"")
+                                       "    border: none;\n"
+                                       "    color: rgb(250, 250, 250);\n"
+                                       "    font-size: 14px;\n"
+                                       "}\n"
+                                       "")
         self.tableWidget.setGridStyle(QtCore.Qt.NoPen)
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(3)
@@ -147,3 +149,50 @@ class Ui_ThirdWindow(object):
         self.label_3.setText(_translate("ThirdWindow", "Write your number"))
         self.label.setText(_translate("ThirdWindow", "Make a word to the enemy"))
         self.send_button.setText(_translate("ThirdWindow", "Send"))
+
+    def nickname_was_chosen(self):
+        # открываем возможность ввода сообщения
+        self.msg_line.setEnabled(True)
+        self.send.setEnabled(True)
+        # блокируем возможность ввода другого никнейма
+        self.nickname.setEnabled(False)
+        self.ok.setEnabled(False)
+
+        # отправляем сокет-серверу введённый никнейм
+        self.client.send(self.nickname.text().encode('ascii'))
+
+        # стартуем поток, который постоянно будет пытаться получить сообщения
+        receive_thread = threading.Thread(target=self.receive)
+        receive_thread.start()
+
+        # метод для получения сообщений от других клиентов
+
+    def receive(self):
+        while True:
+            try:
+                # пытаемся получить сообщение
+                message = self.client.recv(1024).decode('ascii')
+                # если полученное сообщение с информацией не о введеном нике или не о своем сообщении,
+                # добавляем сообщение в список
+                if not message.startswith("NICK") and not message.startswith(self.nickname.text()):
+                    self.messages.append(message)
+            except:
+                # в случае любой ошибки лочим открытые инпуты и выводим ошибку
+                self.msg_line.setText("Error! Reload app")
+                self.msg_line.setEnabled(False)
+                self.send.setEnabled(False)
+                # закрываем клиент
+                self.client.close()
+                break
+
+        # метод, который отправляет сообщение серверу
+
+    def write(self):
+        # составляем сообщение
+        message = '{}: {}'.format(self.nickname.text(), self.msg_line.text())
+        # добавляем его в общий список сообщений
+        self.messages.append(message)
+        # удаляем текст с поля ввода сообщения
+        self.msg_line.setText('')
+        # отправляем сообщение серверу
+        self.client.send(message.encode('ascii'))

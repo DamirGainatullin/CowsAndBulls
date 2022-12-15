@@ -5,8 +5,10 @@ import math
 def get_number(length):
     lst_number = sample([i for i in range(1, 10)], length)
     number = 0
+    ten = 1
     for i in range(1, length + 1):
-        number = lst_number[-i] * math.pow(10, i)
+        number += lst_number[-i] * ten
+        ten *= 10
     return number
 
 
@@ -23,5 +25,9 @@ def get_bulls_and_cows_from_number(number, attempt_number):
     return bulls, cows
 
 
-def is_availbale_numbers(number, length):
-    return True if len(str(number)) == length else ValueError(f'Нужно {length}-значное не повторяющееся')
+def is_available_numbers(number, length):
+    return True if len(str(number)) == length else False
+
+        # ValueError(f'Нужно {length}-значное не повторяющееся')
+
+

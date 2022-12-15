@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import threading
+import time
 
 # Form implementation generated from reading ui file 'untitled.ui'
 #
@@ -11,7 +13,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QTableWidgetItem
 from PyQt5.QtCore import QTimer
-from game import get_bulls_and_cows_from_number, get_number
+import game
 
 
 class Ui_SecondWindow(object):
@@ -20,10 +22,10 @@ class Ui_SecondWindow(object):
         SecondWindow.setObjectName("SecondWindow")
         SecondWindow.resize(567, 637)
         SecondWindow.setStyleSheet("QWidget {\n"
-"    background-color: rgb(95, 95, 95);\n"
-"    color: rgb(250, 250, 250);\n"
-"}\n"
-"")
+                                   "    background-color: rgb(95, 95, 95);\n"
+                                   "    color: rgb(250, 250, 250);\n"
+                                   "}\n"
+                                   "")
         self.centralwidget = QtWidgets.QWidget(SecondWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
@@ -80,11 +82,11 @@ class Ui_SecondWindow(object):
         font.setStyleStrategy(QtGui.QFont.PreferDefault)
         self.tableWidget.setFont(font)
         self.tableWidget.setStyleSheet("QWidget {\n"
-"    border: none;\n"
-"    color: rgb(250, 250, 250);\n"
-"    font-size: 14px;\n"
-"}\n"
-"")
+                                       "    border: none;\n"
+                                       "    color: rgb(250, 250, 250);\n"
+                                       "    font-size: 14px;\n"
+                                       "}\n"
+                                       "")
         self.tableWidget.setGridStyle(QtCore.Qt.NoPen)
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(3)
@@ -171,7 +173,7 @@ class Ui_SecondWindow(object):
         self.easy.setText(_translate("SecondWindow", "Easy"))
         self.hard.setText(_translate("SecondWindow", "Hard"))
         self.label.setText(_translate("SecondWindow", "PLay With Computer"))
-        self.number.setText(_translate("SecondWindow", "1234"))
+        self.number.setText(_translate("SecondWindow", "123"))
         self.medium.setText(_translate("SecondWindow", "Medium"))
         self.tableWidget.setSortingEnabled(False)
         item = self.tableWidget.verticalHeaderItem(0)
@@ -192,48 +194,65 @@ class Ui_SecondWindow(object):
         item.setText(_translate("SecondWindow", "start"))
         self.tableWidget.setSortingEnabled(__sortingEnabled)
         self.label_2.setText(_translate("SecondWindow", "Set game parametres:"))
-        self.textBrowser.setHtml(_translate("SecondWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Lucida Console\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:7.8pt;\">DESCRIPTION:</span></p></body></html>"))
+        self.textBrowser.setHtml(_translate("SecondWindow",
+                                            "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+                                            "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+                                            "p, li { white-space: pre-wrap; }\n"
+                                            "</style></head><body style=\" font-family:\'Lucida Console\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
+                                            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:7.8pt;\">DESCRIPTION:</span></p></body></html>"))
         self.sendButton.setText(_translate("SecondWindow", "Send"))
 
     def send_was_clicked(self):
         self.send_clicked = True
 
     def start_game(self):
+        #Добавить очистку таблицы
+        self.number.setText("Write number")
+        self.pushButton.setEnabled(False)
         self.number.setEnabled(True)
-        if self.easy.isChecked():
-            attempts = 10
-            length = 4
-        elif self.medium.isChecked():
-            attempts = 8
-            length = 5
-        else:
-            attempts = 8
-            length = 6
-        self.clicked = False
         self.sendButton.setEnabled(True)
-        right_number = get_number(length)
-        self.currentRowCount = self.tableWidget.rowCount()
-        print(attempts)
-        for i in range(attempts):
-            # self.timer.start(10000)
-            # wait until input and click button
+        if self.easy.isChecked():
+            self.attempts = 10
+            self.length = 4
+        elif self.medium.isChecked():
+            self.attempts = 8
+            self.length = 5
+        else:
+            self.attempts = 8
+            self.length = 6
+        self.right_num = game.get_number(self.length)
+        thread = threading.Thread(target=self.loop_fun)
+        thread.start()
+
+    def loop_fun(self):
+        while True:
+            self.sendButton.clicked.connect(self.send_was_clicked)
             if self.send_clicked:
-                print(1)
+                self.game()
+
+    def game(self):
+        self.send_clicked = False
+        if game.is_available_numbers(self.number.text(), self.length):
+            try_num = self.number.text()
+            self.number.setText('')
+            self.number.setEnabled(False)
+            self.sendButton.setEnabled(False)
+            bulls, cows = game.get_bulls_and_cows_from_number(self.right_num, try_num)
+            if bulls == 4 and str(try_num) == str(self.right_num):
+                self.number.setText('Win')
+                self.pushButton.setEnabled(True)
+            else:
+                #Здесть надо добавить запись в таблицу
+                self.attempts -= 1
+                print(bulls, cows)
+                print(self.right_num)
+                print(self.attempts)
+                self.number.setEnabled(True)
+                self.sendButton.setEnabled(True)
+            if self.attempts == 0:
+                self.number.setText("Loose, right_num {}".format(self.right_num))
+                self.number.setEnabled(False)
                 self.sendButton.setEnabled(False)
-                try_num = self.number.text()
-                if try_num != right_number:
-                    cows_and_bulls = get_bulls_and_cows_from_number(right_number, try_num)
-                    print(2)
-                    self.tableWidget.setItem(i, 0, QTableWidgetItem(cows_and_bulls[0]))
-                    self.tableWidget.setItem(i, 0, QTableWidgetItem(cows_and_bulls[1]))
-                    self.tableWidget.setItem(i, 0, QTableWidgetItem(try_num))
-                    self.sendButton.setEnabled(True)
-                    print(3)
-                    self.send_clicked = False
-                else:
-                    return 'Win'
-        return 'You suck'
+                self.pushButton.setEnabled(True)
+        else:
+            self.number.setText("Not right number")
