@@ -1,4 +1,3 @@
-import socket
 import sys
 import threading
 
@@ -11,11 +10,7 @@ class Rules(QMainWindow, rules_ui.Ui_Form):
     def __init__(self):
         super(Rules, self).__init__()
         self.setupUi(self)
-
-
-
 class Menu(QMainWindow, app_ui.Ui_MainWindow):
-
     def __init__(self):
         # в методе инициализации мы вызываем родительскую инициализацию (устанавливаем элементы интерфейса)
         super(Menu, self).__init__()
@@ -52,6 +47,7 @@ class Menu(QMainWindow, app_ui.Ui_MainWindow):
         elif self.radioComputer.isChecked():
             self.hide()
             self.openWindowCom()
+
         else:
             pass
 
@@ -66,4 +62,3 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = Menu()
     sys.exit(app.exec_())
-    # pyuic5 name.ui -o name.py
