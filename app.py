@@ -4,6 +4,7 @@ import threading
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QStackedWidget, QListWidget
 from PyQt5 import QtWidgets
 import app_ui, rules_ui, computer, people
+import people2
 
 
 class Rules(QMainWindow, rules_ui.Ui_Form):
@@ -26,12 +27,20 @@ class Menu(QMainWindow, app_ui.Ui_MainWindow):
         self.ui.setupUi(self.window)
         self.window.show()
 
-    def openWindowPeople(self):
-        self.window = QtWidgets.QMainWindow()
-        self.ui = people.Ui_ThirdWindow()
+    def openWindowPeople2(self):
+        self.window2 = QtWidgets.QMainWindow()
+        self.ui2 = people.Ui_ThirdWindow()
         # people.get_name(self.nickName.text())
-        self.ui.setupUi(self.window)
-        self.window.show()
+        self.ui2.setupUi(self.window2)
+        self.window2.show()
+
+
+    def openWindowPeople1(self):
+        self.window1 = QtWidgets.QMainWindow()
+        self.ui1 = people2.Ui_FiveWindow()
+        # people.get_name(self.nickName.text())
+        self.ui1.setupUi(self.window1)
+        self.window1.show()
 
     def nickname_was_chosen(self):
         self.play.setEnabled(True)
@@ -43,7 +52,8 @@ class Menu(QMainWindow, app_ui.Ui_MainWindow):
         self.name = self.nickName.text()
         if self.radioPeople.isChecked():
             self.hide()
-            self.openWindowPeople()
+            self.openWindowPeople1()
+            self.openWindowPeople2()
         elif self.radioComputer.isChecked():
             self.hide()
             self.openWindowCom()
