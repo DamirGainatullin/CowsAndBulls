@@ -86,6 +86,7 @@ class Ui_FiveWindow(object):
         self.tableWidget.verticalHeader().setSortIndicatorShown(True)
         self.tableWidget.verticalHeader().setStretchLastSection(False)
         self.guess_number = QtWidgets.QLineEdit(self.centralwidget)
+        self.guess_number.setEchoMode(QtWidgets.QLineEdit.Password)
         self.guess_number.setGeometry(QtCore.QRect(20, 90, 171, 31))
         self.guess_number.setObjectName("guess_number")
         self.label = QtWidgets.QLabel(self.centralwidget)
@@ -144,3 +145,5 @@ class Ui_FiveWindow(object):
         self.sendButton.setText(_translate("FiveWindow", "Send"))
         self.send_button.setText(_translate("FiveWindow", "Send"))
         self.label_3.setText(_translate("FiveWindow", "Write your number"))
+
+

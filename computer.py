@@ -14,21 +14,6 @@ from PyQt5.QtCore import QObject, pyqtSignal, QThread, QRunnable, QThreadPool
 from PyQt5.QtWidgets import QTableWidgetItem
 import game
 
-
-#
-# class Runnable(QRunnable):
-#     def __init__(self, gui):
-#         self.gui = gui
-#         super().__init__()
-#
-#
-#     def run(self):
-#         while True:
-#             if self.gui.send_clicked:
-#                 self.gui.game()
-
-
-
 class Ui_SecondWindow(object):
     def setupUi(self, SecondWindow):
         SecondWindow.setObjectName("SecondWindow")
@@ -246,7 +231,15 @@ class Ui_SecondWindow(object):
             self.sendButton.setEnabled(False)
             bulls, cows = game.get_bulls_and_cows_from_number(self.right_num, try_num)
             if bulls == 4 and str(try_num) == str(self.right_num):
-                self.number.setText('Win')
+                self.tableWidget.setStyleSheet("QTableWidget {\n"
+                                               "\n"
+                                               "background-color:rgb(0, 255, 0)\n"
+                                               "  \n"
+                                               "\n"
+                                               "\n"
+                                               "\n"
+                                               "}")
+                self.number.setText("WIN {}".format(self.right_num))
                 self.pushButton.setEnabled(True)
             else:
                 self.tableWidget.setItem(self.i, 0, QTableWidgetItem(str(bulls)))
@@ -259,7 +252,16 @@ class Ui_SecondWindow(object):
                 self.number.setEnabled(True)
                 self.sendButton.setEnabled(True)
             if self.attempts == 0:
-                self.number.setText("Loose, right_num {}".format(self.right_num))
+                self.number.setText("Right_num {}".format(self.right_num))
+                self.tableWidget.setStyleSheet("QTableWidget {\n"
+                                               "\n"
+                                               "background-color:rgb(255, 0, 0)\n"
+                                               "  \n"
+                                               "\n"
+                                               "\n"
+                                               "\n"
+                                               "}")
+
                 self.number.setEnabled(False)
                 self.sendButton.setEnabled(False)
                 self.pushButton.setEnabled(True)

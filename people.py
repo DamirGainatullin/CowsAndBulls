@@ -110,6 +110,7 @@ class Ui_ThirdWindow(object):
         self.label.setFont(font)
         self.label.setObjectName("label")
         self.guess_number = QtWidgets.QLineEdit(self.centralwidget)
+        self.guess_number.setEchoMode(QtWidgets.QLineEdit.Password)
         self.guess_number.setGeometry(QtCore.QRect(30, 100, 171, 31))
         self.guess_number.setObjectName("guess_number")
         self.send_button = QtWidgets.QPushButton(self.centralwidget)
