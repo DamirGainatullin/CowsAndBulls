@@ -10,7 +10,21 @@ import threading
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import sys
+import socket
+import selectors
+import types
 
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import QTableWidgetItem
+
+import game
+#
+# def start_connetion(host, port):
+#     sock = socket.socket()
+#     sock.connect((host, port))
+#     sock.send('')
 
 class Ui_ThirdWindow(object):
 
@@ -33,65 +47,73 @@ class Ui_ThirdWindow(object):
         self.sendButton.setIconSize(QtCore.QSize(16, 16))
         self.sendButton.setAutoRepeatInterval(100)
         self.sendButton.setObjectName("sendButton")
-        self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
-        self.tableWidget.setGeometry(QtCore.QRect(20, 310, 391, 291))
+        # self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
+        # self.tableWidget.setGeometry(QtCore.QRect(20, 310, 391, 291))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.tableWidget.sizePolicy().hasHeightForWidth())
-        self.tableWidget.setSizePolicy(sizePolicy)
+        # sizePolicy.setHeightForWidth(self.tableWidget.sizePolicy().hasHeightForWidth())
+        # self.tableWidget.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setStyleStrategy(QtGui.QFont.PreferDefault)
-        self.tableWidget.setFont(font)
-        self.tableWidget.setStyleSheet("QWidget {\n"
-                                       "    border: none;\n"
-                                       "    color: rgb(250, 250, 250);\n"
-                                       "    font-size: 14px;\n"
-                                       "}\n"
-                                       "")
-        self.tableWidget.setGridStyle(QtCore.Qt.NoPen)
-        self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(3)
-        self.tableWidget.setRowCount(1)
-        item = QtWidgets.QTableWidgetItem()
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        item.setForeground(brush)
-        self.tableWidget.setVerticalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        item.setBackground(QtGui.QColor(255, 255, 255))
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        item.setForeground(brush)
-        self.tableWidget.setHorizontalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        item.setBackground(QtGui.QColor(255, 255, 255))
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        item.setForeground(brush)
-        self.tableWidget.setHorizontalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        item.setBackground(QtGui.QColor(255, 255, 255))
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        item.setForeground(brush)
-        self.tableWidget.setHorizontalHeaderItem(2, item)
-        item = QtWidgets.QTableWidgetItem()
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.NoBrush)
-        item.setBackground(brush)
-        self.tableWidget.setItem(0, 0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(0, 1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(0, 2, item)
-        self.tableWidget.horizontalHeader().setCascadingSectionResizes(False)
-        self.tableWidget.horizontalHeader().setDefaultSectionSize(120)
-        self.tableWidget.horizontalHeader().setSortIndicatorShown(False)
-        self.tableWidget.verticalHeader().setCascadingSectionResizes(False)
-        self.tableWidget.verticalHeader().setSortIndicatorShown(True)
-        self.tableWidget.verticalHeader().setStretchLastSection(False)
+        # self.tableWidget.setFont(font)
+        # self.tableWidget.setStyleSheet("QWidget {\n"
+        #                                "    border: none;\n"
+        #                                "    color: rgb(250, 250, 250);\n"
+        #                                "    font-size: 14px;\n"
+        #                                "}\n"
+        #                                "")
+        # self.tableWidget.setGridStyle(QtCore.Qt.NoPen)
+        # self.tableWidget.setObjectName("tableWidget")
+        # self.tableWidget.setColumnCount(3)
+        # self.tableWidget.setRowCount(1)
+        # item = QtWidgets.QTableWidgetItem()
+        # brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+        # brush.setStyle(QtCore.Qt.SolidPattern)
+        # item.setForeground(brush)
+        # self.tableWidget.setVerticalHeaderItem(0, item)
+        # item = QtWidgets.QTableWidgetItem()
+        # item.setBackground(QtGui.QColor(255, 255, 255))
+        # brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+        # brush.setStyle(QtCore.Qt.SolidPattern)
+        # item.setForeground(brush)
+        # self.tableWidget.setHorizontalHeaderItem(0, item)
+        # item = QtWidgets.QTableWidgetItem()
+        # item.setBackground(QtGui.QColor(255, 255, 255))
+        # brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+        # brush.setStyle(QtCore.Qt.SolidPattern)
+        # item.setForeground(brush)
+        # self.tableWidget.setHorizontalHeaderItem(1, item)
+        # item = QtWidgets.QTableWidgetItem()
+        # item.setBackground(QtGui.QColor(255, 255, 255))
+        # brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+        # brush.setStyle(QtCore.Qt.SolidPattern)
+        # item.setForeground(brush)
+        # self.tableWidget.setHorizontalHeaderItem(2, item)
+        # item = QtWidgets.QTableWidgetItem()
+        # brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+        # brush.setStyle(QtCore.Qt.NoBrush)
+        # item.setBackground(brush)
+        # self.tableWidget.setItem(0, 0, item)
+        # item = QtWidgets.QTableWidgetItem()
+        # self.tableWidget.setItem(0, 1, item)
+        # item = QtWidgets.QTableWidgetItem()
+        # self.tableWidget.setItem(0, 2, item)
+        # self.tableWidget.horizontalHeader().setCascadingSectionResizes(False)
+        # self.tableWidget.horizontalHeader().setDefaultSectionSize(120)
+        # self.tableWidget.horizontalHeader().setSortIndicatorShown(False)
+        # self.tableWidget.verticalHeader().setCascadingSectionResizes(False)
+        # self.tableWidget.verticalHeader().setSortIndicatorShown(True)
+        # self.tableWidget.verticalHeader().setStretchLastSection(False)
+        self.messages = QtWidgets.QTextBrowser(self.centralwidget)
+        self.messages.setGeometry(QtCore.QRect(10, 360, 550, 461))
+        self.messages.setFont(QFont("Lucida Console", 30))
+        self.messages.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.messages.setObjectName("messages")
+        # self.messages.append('______________________')
+        # self.messages.append(' Bulls | Cows | Number')
+        # self.messages.setFont(QFont("Lucida Console", 30))
         self.number = QtWidgets.QLineEdit(self.centralwidget)
         self.number.setEnabled(False)
         self.number.setGeometry(QtCore.QRect(170, 270, 121, 31))
@@ -103,7 +125,7 @@ class Ui_ThirdWindow(object):
         self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(30, 30, 511, 61))
+        self.label.setGeometry(QtCore.QRect(30, 30, 521, 61))
         font = QtGui.QFont()
         font.setFamily("Lucida Console")
         font.setPointSize(15)
@@ -115,11 +137,26 @@ class Ui_ThirdWindow(object):
         self.guess_number.setObjectName("guess_number")
         self.send_button = QtWidgets.QPushButton(self.centralwidget)
         self.send_button.setGeometry(QtCore.QRect(250, 100, 131, 31))
-        self.send_button.setObjectName("send_button")
+
+
+
+
+        self.sendButton.clicked.connect(self.write)
+
+        self.send_button.clicked.connect(self.send)
+
+        # self.send_button.setObjectName("send_button")
         ThirdWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(ThirdWindow)
         self.statusbar.setObjectName("statusbar")
         ThirdWindow.setStatusBar(self.statusbar)
+
+
+        # creating client
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client.connect(('127.0.0.1', 5000))
+        # start_connection('127.0.0.1', 5060)
+
 
         self.retranslateUi(ThirdWindow)
         QtCore.QMetaObject.connectSlotsByName(ThirdWindow)
@@ -128,72 +165,64 @@ class Ui_ThirdWindow(object):
         _translate = QtCore.QCoreApplication.translate
         ThirdWindow.setWindowTitle(_translate("ThirdWindow", "MainWindow"))
         self.sendButton.setText(_translate("ThirdWindow", "Send"))
-        self.tableWidget.setSortingEnabled(False)
-        item = self.tableWidget.verticalHeaderItem(0)
-        item.setText(_translate("ThirdWindow", "1"))
-        item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(_translate("ThirdWindow", "Bulls"))
-        item = self.tableWidget.horizontalHeaderItem(1)
-        item.setText(_translate("ThirdWindow", "Cows"))
-        item = self.tableWidget.horizontalHeaderItem(2)
-        item.setText(_translate("ThirdWindow", "Number"))
-        __sortingEnabled = self.tableWidget.isSortingEnabled()
-        self.tableWidget.setSortingEnabled(False)
-        item = self.tableWidget.item(0, 0)
-        item.setText(_translate("ThirdWindow", "start"))
-        item = self.tableWidget.item(0, 1)
-        item.setText(_translate("ThirdWindow", "start"))
-        item = self.tableWidget.item(0, 2)
-        item.setText(_translate("ThirdWindow", "start"))
-        self.tableWidget.setSortingEnabled(__sortingEnabled)
+        # self.tableWidget.setSortingEnabled(False)
+        # item = self.tableWidget.verticalHeaderItem(0)
+        # item.setText(_translate("ThirdWindow", "1"))
+        # item = self.tableWidget.horizontalHeaderItem(0)
+        # item.setText(_translate("ThirdWindow", "Bulls"))
+        # item = self.tableWidget.horizontalHeaderItem(1)
+        # item.setText(_translate("ThirdWindow", "Cows"))
+        # item = self.tableWidget.horizontalHeaderItem(2)
+        # item.setText(_translate("ThirdWindow", "Number"))
+        # __sortingEnabled = self.tableWidget.isSortingEnabled()
+        # # self.tableWidget.setSortingEnabled(False)
+        # item = self.tableWidget.item(0, 0)
+        # item.setText(_translate("ThirdWindow", "start"))
+        # item = self.tableWidget.item(0, 1)
+        # item.setText(_translate("ThirdWindow", "start"))
+        # item = self.tableWidget.item(0, 2)
+        # item.setText(_translate("ThirdWindow", "start"))
+        # self.tableWidget.setSortingEnabled(__sortingEnabled)
         self.number.setText(_translate("ThirdWindow", "1234"))
         self.label_3.setText(_translate("ThirdWindow", "Write your number"))
-        self.label.setText(_translate("ThirdWindow", "Make a word to the enemy"))
+        self.label.setText(_translate("ThirdWindow", "Make a number to the enemy"))
         self.send_button.setText(_translate("ThirdWindow", "Send"))
 
-    def nickname_was_chosen(self):
-        # открываем возможность ввода сообщения
-        self.msg_line.setEnabled(True)
-        self.send.setEnabled(True)
-        # блокируем возможность ввода другого никнейма
-        self.nickname.setEnabled(False)
-        self.ok.setEnabled(False)
+    def send(self):
+        guess_number = self.guess_number.text()
+        if game.is_available_numbers(guess_number, 4):
+            self.client.send(f's{guess_number}'.encode('ascii'))
+            self.guess_number.setEnabled(False)
+            self.send_button.setEnabled(False)
+            self.number.setEnabled(True)
+            self.sendButton.setEnabled(True)
+            receive_thread = threading.Thread(target=self.receive)
+            receive_thread.start()
+        else:
+            self.guess_number.setText('Incorrect number')
 
-        # отправляем сокет-серверу введённый никнейм
-        self.client.send(self.nickname.text().encode('ascii'))
-
-        # стартуем поток, который постоянно будет пытаться получить сообщения
-        receive_thread = threading.Thread(target=self.receive)
-        receive_thread.start()
-
-        # метод для получения сообщений от других клиентов
+    def write(self):
+        message = self.number.text()
+        self.client.send(message.encode('ascii'))
+        self.sendButton.setEnabled(False)
 
     def receive(self):
+        print(1)
         while True:
             try:
                 # пытаемся получить сообщение
                 message = self.client.recv(1024).decode('ascii')
-                # если полученное сообщение с информацией не о введеном нике или не о своем сообщении,
-                # добавляем сообщение в список
-                if not message.startswith("NICK") and not message.startswith(self.nickname.text()):
-                    self.messages.append(message)
+                print(message, message == 'wait')
+                if message == 'f':
+                    self.messages.append('LOSE')
+                elif message == 'w':
+                    self.messages.append('WIN')
+                else:
+                    self.sendButton.setEnabled(True)
+                    message = message.split()
+                    print(message)
+                    self.messages.append(f'{message[0]} | {message[1]} | {message[2]}')
+                    # self.sendButton.setEnabled(False)
             except:
-                # в случае любой ошибки лочим открытые инпуты и выводим ошибку
-                self.msg_line.setText("Error! Reload app")
-                self.msg_line.setEnabled(False)
-                self.send.setEnabled(False)
-                # закрываем клиент
-                self.client.close()
-                break
+                print('error')
 
-        # метод, который отправляет сообщение серверу
-
-    def write(self):
-        # составляем сообщение
-        message = '{}: {}'.format(self.nickname.text(), self.msg_line.text())
-        # добавляем его в общий список сообщений
-        self.messages.append(message)
-        # удаляем текст с поля ввода сообщения
-        self.msg_line.setText('')
-        # отправляем сообщение серверу
-        self.client.send(message.encode('ascii'))

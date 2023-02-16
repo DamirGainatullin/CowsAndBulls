@@ -1,5 +1,4 @@
 from random import sample
-import math
 
 
 def get_number(length):

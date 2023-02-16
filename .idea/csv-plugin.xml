@@ -17,6 +17,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="C:\Users\Damir Gainatullin\PycharmProjects\infa\Hotel.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\app.py">
           <value>
             <Attribute>
@@ -60,6 +67,27 @@
           </value>
         </entry>
         <entry key="\people.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\people2.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\queue.txt">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\server.py">
           <value>
             <Attribute>
               <option name="separator" value="," />
