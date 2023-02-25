@@ -1,9 +1,7 @@
-import sys
-import socket
 import threading
 import game
 
-host, port = "0.0.0.0", 5000
+host, port = "0.0.0.0", 5010
 
 import socket
 
@@ -15,9 +13,7 @@ second_player_number = 0
 players = []
 
 def check_and_send(number, conn):
-    print('check and send')
     if game.is_available_numbers(number, 4):
-        print(1)
         if conn == players[0]:
             bulls, cows = game.get_bulls_and_cows_from_number(second_player_number ,number)
             print(bulls, cows)
@@ -26,7 +22,7 @@ def check_and_send(number, conn):
                 players[0].send('w'.encode('ascii'))
             else:
                 players[0].send(f'{bulls} {cows} {number}'.encode('ascii'))
-            # players[0].send(f'{bulls} {cows} {number}'.encode('ascii'))
+                players[1].send('ready'.encode('ascii'))
         else:
             bulls, cows = game.get_bulls_and_cows_from_number(first_player_number ,number)
             if bulls == 4:
@@ -34,6 +30,10 @@ def check_and_send(number, conn):
                 players[1].send('w'.encode('ascii'))
             else:
                 players[1].send(f'{bulls} {cows} {number}'.encode('ascii'))
+                players[0].send('ready'.encode('ascii'))
+    else:
+        conn.send('i'.encode('ascii'))
+
 
 def handle(conn):
     print('handle', conn)
@@ -42,7 +42,7 @@ def handle(conn):
             number = conn.recv(1024).decode('ascii')
             check_and_send(number, conn)
         except:
-            print('error')
+            conn.close()
 
 
 while True:
@@ -58,10 +58,6 @@ while True:
         print(first_player_number, second_player_number)
         thread = threading.Thread(target=handle, args=(conn,))
         thread.start()
-    # if not data:
-    #     break
-    # conn.send('ok'.encode('ascii'))
 
 
 
-conn.close()

@@ -25,8 +25,7 @@ def get_bulls_and_cows_from_number(number, attempt_number):
 
 
 def is_available_numbers(number, length):
-    return True if len(str(number)) == length else False
+    return True if len(set(str(number))) == length and len(str(number)) == length else False
 
-        # ValueError(f'Нужно {length}-значное не повторяющееся')
 
 
